@@ -370,15 +370,21 @@ void movePlayer2(string player1, string player2, char& wasSnakeOrLadder, int& la
 {
     string r;
 
-    if (wasSnakeOrLadder == 's')      //If player 1 was on a snake
+    // Clear the screen and display the board first
+    system("clear");
+    displayBoard();
+    displayLengths(); // Displays messages containing the lengths of snakes and ladders
+
+    // Print Player 1's move result at the bottom
+    if (wasSnakeOrLadder == 's') // If player 1 was on a snake
     {
         cout << player1 << " slid down " << snakeLength + 1 << " spaces and is now at location " << newLocation << ". ";
     }
-    else if (wasSnakeOrLadder == 'l')       //If player 1 was on a ladder
+    else if (wasSnakeOrLadder == 'l') // If player 1 was on a ladder
     {
         cout << player1 << " climbed up " << ladderLength - 1 << " spaces and is now at location " << newLocation << ". ";
     }
-    else        //If player 1 was not on a snake or ladder
+    else // If player 1 was not on a snake or ladder
     {
         if (roll == 1)
             cout << player1 << " rolled " << roll << " space and is now at location " << p1 << ". ";
@@ -386,22 +392,23 @@ void movePlayer2(string player1, string player2, char& wasSnakeOrLadder, int& la
             cout << player1 << " rolled " << roll << " spaces and is now at location " << p1 << ". ";
     }
 
-    wasSnakeOrLadder = 'n';     //Changes back to n so that it does not affect the future code
+    wasSnakeOrLadder = 'n'; // Reset to not affect future code
 
     switch (menu1)
     {
-        case 1:     //Bot 
+        case 1: // Bot
             cout << "Now, bot will play...";
-            this_thread::sleep_for(chrono::seconds(4));         //Introduces a pause for 4 seconds
+            cout << endl; // Add a newline for clarity
+            this_thread::sleep_for(chrono::seconds(0)); // Pause for 0 seconds after the message
             break;
-        case 2:     //Friend
+        case 2: // Friend
             cout << player2 << ", press r to roll the dice: ";
             getline(cin, r);
             while (r != "r" && r != "R")
             {
                 system("clear");
                 displayBoard();
-                displayLengths();       //Displays messages containing the lengths of snakes and ladders
+                displayLengths(); // Displays messages containing the lengths of snakes and ladders
                 cout << "You should enter r! ";
                 cout << player2 << ", press r to roll the dice: ";
                 getline(cin, r);
@@ -415,47 +422,49 @@ void movePlayer2(string player1, string player2, char& wasSnakeOrLadder, int& la
 
     if (p2 == p1)
     {
-        board[p1 - 1] = player1.substr(0, 1) + " ";     // insert the name of the player to the right place 
+        board[p1 - 1] = player1.substr(0, 1) + " "; // Insert the name of the player to the right place
     }
     else
     {
         if (p2 - 1 < 9)
-            board[p2 - 1] = to_string(p2) + " "; // return the previous value to the original number instead of the player name
+            board[p2 - 1] = to_string(p2) + " "; // Return the previous value to the original number
         else
-            board[p2 - 1] = to_string(p2); // return the previous value to the original number instead of the player name
+            board[p2 - 1] = to_string(p2); // Return the previous value to the original number
     }
 
-    p2 = roll + p2;   // increase the value to move to the next turn
+    p2 = roll + p2; // Increase the value to move to the next turn
 
     if (moveToLadder(p2, player2, ladderLength, newLocation) == 'l')
         wasSnakeOrLadder = 'l';
     else if (moveToSnake(p2, player2, snakeLength, newLocation) == 's')
         wasSnakeOrLadder = 's';
 
-    // if two players meet at the same point
+    // If two players meet at the same point
     if (p2 == p1)
     {
-        board[p2 - 1] = player1.substr(0, 1) + player2.substr(0, 1);     // leave p2 as it is, but move p1
+        board[p2 - 1] = player1.substr(0, 1) + player2.substr(0, 1); // Leave p2 as it is, but move p1
     }
     else
     {
-        board[p2 - 1] = player2.substr(0, 1) + " ";     // insert the name of the player to the right place 
+        board[p2 - 1] = player2.substr(0, 1) + " "; // Insert the name of the player to the right place
     }
+
+    // Clear the screen and display the updated board
     system("clear");
-    displayBoard();     // show the board after the name inserted 
-    displayLengths();       //Displays messages containing the lengths of snakes and ladders
+    displayBoard();
+    displayLengths(); // Displays messages containing the lengths of snakes and ladders
 
     if (p2 < boardSize)
     {
-        if (wasSnakeOrLadder == 's')      //If player 2 was on a snake
+        if (wasSnakeOrLadder == 's') // If player 2 was on a snake
         {
             cout << player2 << " slid down " << snakeLength + 1 << " spaces and is now at location " << newLocation << ". ";
         }
-        else if (wasSnakeOrLadder == 'l')       //If player 2 was on a ladder
+        else if (wasSnakeOrLadder == 'l') // If player 2 was on a ladder
         {
             cout << player2 << " climbed up " << ladderLength - 1 << " spaces and is now at location " << newLocation << ". ";
         }
-        else        //If player 2 was not on a snake or ladder
+        else // If player 2 was not on a snake or ladder
         {
             if (roll == 1)
                 cout << player2 << " rolled " << roll << " space and is now at location " << p2 << ". ";
@@ -463,7 +472,7 @@ void movePlayer2(string player1, string player2, char& wasSnakeOrLadder, int& la
                 cout << player2 << " rolled " << roll << " spaces and is now at location " << p2 << ". ";
         }
     }
-    wasSnakeOrLadder = 'n';     //Changes back to n so that it does not affect the future code
+    wasSnakeOrLadder = 'n'; // Reset to not affect future code
 }
 char moveToLadder(int& p0, string player0, int& ladderLength, int& newLocation)
 {
@@ -579,22 +588,23 @@ void play()
         cin >> player1;
         system("clear");
         player2 = "Bot";
+        dp1 = player1; // Set dp1 to player1's name
+        dp2 = player2; // Set dp2 to "Bot"
         break;
     case 2:
         system("clear");
         displayMenu3(player1, player2);
         system("clear");
-
-        dp1 = player1;
-        dp2 = player2;
+        dp1 = player1; // Set dp1 to player1's name
+        dp2 = player2; // Set dp2 to player2's name
         break;
     default: 
         break;
     }
 
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');        //Ignores the newline characters
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignores the newline characters
 
-    board[0] = player1.substr(0, 1) + player2.substr(0, 1);     //The starting position of player 1 and player 2
+    board[0] = player1.substr(0, 1) + player2.substr(0, 1); // The starting position of player 1 and player 2
 
     displayBoard();
     while (true)
@@ -605,7 +615,7 @@ void play()
             system("clear");
             board[99] = player1.substr(0, 1) + "  ";
             displayBoard();
-            cout << dp1 << " beat " << dp2 << "!\n";
+            cout << dp1 << " beat " << dp2 << "!\n"; // Use dp1 and dp2 for the victory message
             break;
         }
         movePlayer2(player1, player2, wasSorL, ladLength, snakeLen, newLoc);
@@ -614,7 +624,7 @@ void play()
             system("clear");
             board[99] = player2.substr(0, 1) + "  ";
             displayBoard();
-            cout << dp2 << " beat " << dp1 << "!\n";
+            cout << dp2 << " beat " << dp1 << "!\n"; // Use dp2 and dp1 for the victory message
             break;
         }
     }
